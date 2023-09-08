@@ -1,0 +1,48 @@
+{% load static %}
+<header x-data="{ mobilenavOpen: false }" class="md:flex items-center justify-between [&>*]:px-8 bg-gray-800 h-20 text-white sticky top-0 z-40">
+    <div class="flex items-center justify-between h-20">
+        <logo>
+            <a class="flex items-center gap-1" href="/">
+                <img class="w-6 mr-1 -mt-1" src="{% static 'images/fireheart_white.svg' %}"/>
+                <span class="text-lg font-bold">Awesome</span>
+            </a>
+        </logo>
+        <mobileicon class="md:hidden">
+            <a @click="mobilenavOpen = !mobilenavOpen" class="h-12 w-12 flex items-center justify-center cursor-pointer hover:bg-gray-700 rounded-lg">
+                <img x-show="!mobilenavOpen" class="w-6 h-6 select-none" src="https://img.icons8.com/small/64/ffffff/menu.png"/> 
+                <img x-show="mobilenavOpen" x-cloak class="w-6 h-6 select-none" src="https://img.icons8.com/small/64/ffffff/delete-sign.png"/>
+            </a>
+        </mobileicon>
+    </div>
+    <nav x-show="mobilenavOpen" x-cloak class="md:!block bg-gray-800 h-screen w-screen md:h-auto md:w-auto -mt-20 md:mt-0 absolute md:relative z-[-1]"
+    x-transition:enter="duration-300 ease-out"
+    x-transition:enter-start="opacity-0 -translate-y-96"
+    x-transition:enter-end="opacity-100 translate-y-0">
+        <ul class="flex items-center navitems flex-col md:flex-row gap-8 md:gap-0 justify-center h-full -translate-y-10 md:translate-y-0">
+            {% if user.is_authenticated %}
+            <li><a href="/">Home</a></li>
+            <li><a href="{% url 'post-create' %}">Create Post</a></li>
+            <li x-data="{ dropdownOpen: false }" class="relative">
+                <a @click="dropdownOpen = !dropdownOpen" @click.away="dropdownOpen = false" class="cursor-pointer select-none">
+                    <img class="h-8 w-8 rounded-full object-cover" src="{{ user.profile.avatar }}"/>
+                    {{ user.profile.name }}
+                    <img x-bind:class="dropdownOpen && 'rotate-180 duration-300'" class="w-4" src="https://img.icons8.com/small/32/777777/expand-arrow.png"/>
+                </a>
+                <div x-show="dropdownOpen" x-cloak class="absolute right-0 bg-white text-black shadow rounded-lg w-40 p-2 z-20"
+                x-transition:enter="duration-300 ease-out"
+                x-transition:enter-start="opacity-0 -translate-y-5 scale-90"
+                x-transition:enter-end="opacity-100 translate-y-0 scale-100">
+                    <ul class="hoverlist [&>li>a]:justify-end">
+                        <li><a href="{% url 'profile' %}">My Profile</a></li>
+                        <li><a href="{% url 'profile-edit' %}">Edit Profile</a></li>
+                        <li><a href="{% url 'account_logout' %}">Log Out</a></li>
+                    </ul>
+                </div>
+            </li>
+            {% else %}
+            <li><a href="{% url 'account_login' %}">Log In</a></li>
+            <li><a href="{% url 'account_signup' %}">Sign Up</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+</header>

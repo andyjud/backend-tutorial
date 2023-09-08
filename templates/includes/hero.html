@@ -1,0 +1,10 @@
+<hero class="grid bg-gray-700 text-white text-center bg-cover z-10 relative bg-[url('https://live.staticflickr.com/65535/49909538937_3255dcf9e7_b.jpg')]">
+    <div class="col-start-1 row-start-1 bg-gray-800 bg-opacity-40 w-full h-full"></div>
+    <div class="col-start-1 row-start-1 py-24 px-10 ">
+        <h1 class="font1 text-6xl title-fadein">Awesome Photos & Captions</h1>
+        <p class="text-lg font-bold mb-5">Share your favorite Photos from Flickr and add a great caption</p>
+        {% if not user.is_authenticated %}
+        <a class="button" href="{% url 'account_signup' %}">Get Started</a>
+        {% endif %}
+    </div>
+</hero>
