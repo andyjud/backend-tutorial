@@ -1,0 +1,22 @@
+{% extends 'layouts/b.html' %}
+
+{% block content %}
+
+<h1>Create Post</h1>
+<div class="card !p-8">
+    
+    <div class="flex items-center mb-6">
+        <img class="h-5 object-cover mr-1" src="https://img.icons8.com/small/96/333333/search--v1.png"/>
+        <a href="https://www.flickr.com/explore" target="_blank" class="hover:underline text-gray-500">Find an image on Flickr</a>
+    </div>
+
+    <form method='POST'>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="mt-1">Submit Post</button>
+        <a class="button secondaryAction ml-1" href="{{ request.META.HTTP_REFERER }}">Cancel</a>
+    </form>
+</div>
+
+{% endblock %}
+

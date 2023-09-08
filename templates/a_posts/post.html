@@ -1,0 +1,51 @@
+{% load static %}
+<article class="card">
+    <div class="flex items-center justify-between px-4 h-14">
+        <h3 class="text-start leading-5 mr-1">{{ post.title }}</h3>
+        <div class="text-sm text-gray-400 truncate">flickr<a href="{{ post.url }}" class="hover:underline ml-1" target="blank">@{{ post.artist }}</a></div>
+    </div>
+    <figure>
+        <a href="{% url 'post' post.id %}"><img class="w-full" src="{{ post.image }}"></a>
+    </figure>
+    <div class="p-4 pb-2">
+        {% if post.author %}
+        <a class="flex items-center gap-1 mb-4" href="{% url 'userprofile' post.author.username %}">
+            <img class="w-8 h-8 object-cover rounded-full" src="{{ post.author.profile.avatar }}">  
+            <span class="font-bold hover:underline">{{ post.author.profile.name }}</span>
+            <span class="text-sm text-gray-400">@{{ post.author.username }}</span>          
+        </a>
+        {% else %}
+        <div class="flex items-center gap-1 mb-4">
+            <img class="w-8 h-8 object-cover rounded-full" src="{% static 'images/avatar_default.svg' %}">
+            <span class="text-gray-500">no author</span>
+        </div>
+        {% endif %}
+        <p class="text-5xl mb-10 px-4 font1">{{ post.body }}</p>
+        <div class="flex items-center gap-2 text-sm mb-5 flex-wrap">
+            {% for tag in post.tags.all %}
+            <a href="{% url 'category' tag.slug %}" class="bg-gray-200 rounded-full px-3 py-1 hover:bg-gray-800 hover:text-white">{{ tag }}</a>
+            {% endfor %}
+        </div>
+        <div class="flex items-center justify-between text-sm px-2">
+            <a class="font-bold hover:underline" href="{% url 'post' post.id %}">
+                {% if post.comments.count %}
+                Comments
+                <span id="commentscount-{{ post.id }}" class="font-light text-gray-500 ml-1">{{ post.comments.count }}</span>
+                {% else %}
+                    {% if user.is_authenticated %}
+                    Add comment
+                    {% endif %}
+                {% endif %}
+            </a>
+            <div class="flex items-center gap-4 [&>a:hover]:underline">
+                
+                {% include 'snippets/likes.html' %}
+
+                {% if user.is_authenticated and user == post.author %}
+                <a href="{% url 'post-edit' post.id %}">Edit</a>
+                <a href="{% url 'post-delete' post.id %}">Delete</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</article>

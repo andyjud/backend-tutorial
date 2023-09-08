@@ -1,0 +1,63 @@
+{% load static %}
+<comment class="card p-4 !mb-4">
+    <div class="flex justify-between items-center"> 
+        {% if comment.author %}
+        <a class="flex items-center gap-1 mb-2" href="{% url 'userprofile' comment.author.username  %}">
+            <img class="w-8 h-8 object-cover rounded-full" src="{{ comment.author.profile.avatar }}"> 
+            <span class="font-bold hover:underline">{{ comment.author.profile.name }}</span>
+            <span class="text-sm font-normal text-gray-400">@{{ comment.author.username }}</span>
+        </a>
+        {% else %}
+        <div class="flex items-center gap-1 mb-4">
+            <img class="w-8 h-8 object-cover rounded-full" src="{% static 'images/avatar_default.svg' %}">
+            <span class="text-gray-500">no author</span>
+        </div>
+        {% endif %}
+    </div>
+    <p class="text-xl px-2">
+        {{ comment.body }}
+    </p>
+    <div x-data="{ repliesOpen: false }" class="flex items-center justify-between flex-wrap text-sm px-2">
+        <a @click="repliesOpen = !repliesOpen" class="font-bold hover:underline cursor-pointer">
+            {% if comment.replies.count or user.is_authenticated %}
+            <div class="inline-block" x-bind:class="repliesOpen && 'rotate-90 duration-300'">
+                <svg transform ="rotate(90)" width="9" height="9" viewBox="0 0 25 25">
+                    <path d="M24 22h-24l12-20z"/>
+                </svg>
+            </div>
+            {% endif %}
+            {% if comment.replies.count %}
+            Replies
+            <span id="repliescount-{{ comment.id }}" class="font-light text-gray-500 ml-1">{{ comment.replies.count }}</span>
+            {% else %}
+                {% if user.is_authenticated %}
+                Add Reply
+                {% endif %}
+            {% endif %}
+        </a>
+        <div class="flex items-center gap-4 [&>a:hover]:underline">
+            {% include 'snippets/likes_comment.html' %}
+            {% if user.is_authenticated and comment.author == user %}
+            <a href="{% url 'comment-delete' comment.id %}">Delete</a>
+            {% endif %}
+        </div>
+
+        <div x-show="repliesOpen" x-cloak class="basis-full mt-3 pl-8 grid grid-cols-1">
+
+            {% for reply in comment.replies.all %}
+            {% include 'a_posts/reply.html' %}
+            {% endfor %}
+
+            {% if user.is_authenticated %}
+            <form class="replyform flex justify-between" autocomplete="off"
+            hx-post="{% url 'reply-sent' comment.id %}"
+            hx-target="this" 
+            hx-swap="outerHTML" >
+                {% csrf_token %}
+                {{ replyform }}
+                <button class="block" type="submit">Submit</button>
+            </form>
+            {% endif %}
+        </div>
+    </div> 
+</comment>
