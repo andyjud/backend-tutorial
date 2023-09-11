@@ -22,26 +22,23 @@
             <h2>Top Posts</h2>
         </div>
         <ul class="hoverlist">
+            {% for post in top_posts %}
             <li>
-                <a href="" class="flex items-stretch justify-between">
+                <a href="{% url 'post' post.id %}" class="flex items-stretch justify-between">
                     <div class="flex items-center truncate">
-                        <img class="w-10 h-10 rounded-lg object-cover mr-3 shrink-0" src="https://live.staticflickr.com/65535/50618365686_36f887ab88_c.jpg">
-                        <img class="w-6 h-6 rounded-full object-cover mr-1" src="https://img.icons8.com/small/96/A9A9A9/happy.png">
-                        <span class="font-bold text-sm mr-1">Homer</span>
+                        <img class="w-10 h-10 rounded-lg object-cover mr-3 shrink-0" src="{{ post.image }}">
+                        {% if post.author %}
+                        <img class="w-6 h-6 rounded-full object-cover mr-1" src="{{ post.author.profile.avatar }}">
+                        <span class="font-bold text-sm mr-1">{{ post.author.username }}</span>
+                        {% else %}
+                        <img class="w-6 h-6 rounded-full object-cover mr-1" src="{% static 'images/avatar_default.svg' %}">
+                        <span class="text-sm mr-1">no author</span>
+                        {% endif %}
                     </div>
-                    <span class="text-sm font-light text-grey-500 shrink-0">3 Likes / 1</span>
+                    <span class="{% if user in post.likes.all %}font-bold{% else %}font-light{% endif %} text-sm  text-grey-500 shrink-0">{{ post.likes.count }} Like{{ post.likes.count|pluralize:'s' }} / {{ post.comments.count }}</span>
                 </a>
             </li>
-            <li>
-                <a href="" class="flex items-stretch justify-between">
-                    <div class="flex items-center truncate">
-                        <img class="w-10 h-10 rounded-lg object-cover mr-3" src="https://live.staticflickr.com/65535/50618365686_36f887ab88_c.jpg">
-                        <img class="w-6 h-6 rounded-full object-cover mr-1" src="https://img.icons8.com/small/96/A9A9A9/happy.png">
-                        <span class="font-bold text-sm mr-1">Homer</span>
-                    </div>
-                    <span class="text-sm font-light text-grey-500 shrink-0">3 Likes / 1</span>
-                </a>
-            </li>
+            {% endfor %}
         </ul>
     </section>
     <section class="card p-4">
@@ -50,24 +47,21 @@
             <h2>Top Comments</h2>
         </div>
         <ul class="hoverlist">
+            {% for comment in top_comments %}
             <li>
-                <a href="" class="flex items-stretch justify-between">
+                <a href="{% url 'post' comment.parent_post.id %}" class="flex items-stretch justify-between">
                     <div class="flex items-center truncate">
-                        <img class="w-6 h-6 rounded-full object-cover mr-1" src="https://img.icons8.com/small/96/A9A9A9/happy.png">
-                        <span class="font-bold text-sm mr-1 truncate">Homer : Comment</span>
+                        {% if comment.author %}
+                        <img class="w-6 h-6 rounded-full object-cover mr-1" src="{{ comment.author.profile.avatar }}">
+                        {% else %}
+                        <img class="w-6 h-6 rounded-full object-cover mr-1" src="{% static 'images/avatar_default.svg' %}">
+                        {% endif %}
+                        <span class="font-bold text-sm mr-1 truncate">{% if comment.author %}{{ comment.author.username }}{% else %}<span class="font-light">no author</span>{% endif %} : {{ comment.body|truncatechars:10 }}</span>
                     </div>
-                    <span class="text-sm font-light text-grey-500 shrink-0">3 Likes / 1</span>
+                    <span class="{% if user in comment.likes.all %}font-bold{% else %}font-light{% endif %} text-sm text-grey-500 shrink-0">{{ comment.likes.count }} Like{{ comment.likes.count|pluralize:'s' }} / {{ comment.replies.count }}</span>
                 </a>
             </li>
-            <li>
-                <a href="" class="flex items-stretch justify-between">
-                    <div class="flex items-center truncate">
-                        <img class="w-6 h-6 rounded-full object-cover mr-1" src="https://img.icons8.com/small/96/A9A9A9/happy.png">
-                        <span class="font-bold text-sm mr-1 truncate">Homer : Comment</span>
-                    </div>
-                    <span class="text-sm font-light text-grey-500 shrink-0">3 Likes / 1</span>
-                </a>
-            </li>
+            {% endfor %}
         </ul>
     </section>
 </aside>
