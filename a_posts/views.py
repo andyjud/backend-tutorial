@@ -96,7 +96,6 @@ def post_page_view(request, pk):
     
     if request.htmx:
         if 'top' in request.GET:
-            # comments = post.comments.filter(likes__isnull=False).distinct()
             comments = post.comments.annotate(num_likes=Count('likes')).filter(num_likes__gt=0).order_by('-num_likes')
         else:
             comments = post.comments.all()
