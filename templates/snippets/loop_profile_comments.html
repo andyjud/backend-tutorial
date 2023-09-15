@@ -1,0 +1,18 @@
+<fade-in class="opacity-0" _="on load transition my opacity to 1 over 0.2 seconds">
+    <div class="w-full lg:w-[50rem] mx-auto">
+
+    {% if comments %}
+        {% for comment in comments %}
+        <div class="flex gap-2">
+            <a href="{% url 'post' comment.parent_post.id %}">
+                <img class="w-20 h-20 object-cover rounded-xl hover:scale-95 max-w-none" src="{{ comment.parent_post.image }}">
+            </a>
+            {% include 'a_posts/comment.html' %}
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="w-full text-center mt-10">No comments just yet</div>
+    {% endif %}
+
+    </div>
+</fade-in>
