@@ -3,10 +3,14 @@
 {% block content %}
 
 {% for post in posts %}
-
 {% include 'a_posts/post.html' %}
-
 {% endfor %}
 
+<div hx-get="{% if tag %}{% url 'category' tag.slug %}{% else %}
+            {% url 'home' %}{% endif %}?page={{ page|add:1 }}"
+    hx-trigger="revealed"
+    hx-target="this"
+    hx-swap="outerHTML">
+</div>
 
 {% endblock %}
