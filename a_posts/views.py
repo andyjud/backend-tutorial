@@ -7,6 +7,7 @@ from .forms import *
 from bs4 import BeautifulSoup
 import requests
 from django.contrib import messages
+from django.core.paginator import Paginator
 
 
 def home_view(request, tag=None): 
@@ -15,11 +16,22 @@ def home_view(request, tag=None):
         tag = get_object_or_404(Tag, slug=tag)
     else:
         posts = Post.objects.all()
+        
+    paginator = Paginator(posts, 3)
+    page = int(request.GET.get('page', 1))
+    try:
+        posts = paginator.page(page)
+    except:
+        return HttpResponse('')
     
     context = {
         'posts' : posts,
-        'tag' : tag
+        'tag' : tag,
+        'page' : page
     }
+    
+    if request.htmx:
+        return render(request, 'snippets/loop_home_posts.html', context)
         
     return render(request, 'a_posts/home.html', context)
 
@@ -34,11 +46,14 @@ def post_create_view(request):
             post = form.save(commit=False)
             
             website = requests.get(form.data['url'])
-            print(website)
             sourcecode = BeautifulSoup(website.text, 'html.parser')
-            
             find_image = sourcecode.select('meta[content^="https://live.staticflickr.com/"]')
-            image = find_image[0]['content']
+            try:   
+                image = find_image[0]['content']
+            except:
+                messages.error(request, 'Requested image is not on Flickr!')
+                return redirect('post-create')
+            
             post.image = image
             
             find_title = sourcecode.select('h1.photo-title')
