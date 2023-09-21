@@ -1,0 +1,12 @@
+<fade-in class="opacity-0" _="on load transition my opacity to 1 over 0.3 seconds">
+{% for post in posts %}
+{% include 'a_posts/post.html' %}
+{% endfor %}
+
+<div hx-get="{% if tag %}{% url 'category' tag.slug %}{% else %}
+            {% url 'home' %}{% endif %}?page={{ page|add:1 }}"
+    hx-trigger="revealed"
+    hx-target="this"
+    hx-swap="outerHTML">
+</div>
+</fade-in>
