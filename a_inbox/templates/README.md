@@ -1,9 +1,3 @@
-- 👋 Hi, I’m Andreas Jud
-- 👀 I’m interested in frontend, backend and UX
-- 🌱 I’m currently working on youtube tutorials at youtube.com/@ajudmeister
-- 📫 How to reach me: Instagram @ajudmeister
+Templates and code snippets for the inbox module are excluse to my patreons. 
 
-<!---
-andyjud/andyjud is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
-You can click the Preview link to take a look at your changes.
---->
+Become my patreon at https://www.patreon.com/andreasjud
