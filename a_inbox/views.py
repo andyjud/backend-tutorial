@@ -25,7 +25,7 @@ def search_users(request):
     if request.htmx:
         letters = request.GET.get('search_user')
         if len(letters) > 0:
-            profiles = Profile.objects.filter(realname__icontains=letters).exclude(realname=request.user.profile.realname)
+            profiles = Profile.objects.filter(realname__icontains=letters)
             users_id = profiles.values_list('user', flat=True)
             users = User.objects.filter(
                 Q(username__icontains=letters) | Q(id__in=users_id)
