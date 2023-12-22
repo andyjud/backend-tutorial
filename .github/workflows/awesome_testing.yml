@@ -1,0 +1,26 @@
+name: Awesome Testing
+
+on:
+  pull_request:
+    branches:
+    - staging
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      ENVIRONMENT : development
+      SECRET_KEY : secret_key
+      ENCRYPT_KEY : wQnNygBIVX2R_3C9W9Y2HW_Q8HZXcpl-L5eliDISB8A=
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.11.3
+
+      - run: python -m pip install --upgrade pip
+      - run: pip install -r requirements.txt
+      - run: python manage.py test
