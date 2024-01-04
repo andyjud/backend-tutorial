@@ -44,6 +44,7 @@ urlpatterns = [
     path('comment/delete/<pk>/', comment_delete_view, name='comment-delete'),
     path('replysent/<pk>/', reply_sent, name='reply-sent'), 
     path('reply/delete/<pk>/', reply_delete_view, name='reply-delete'),
+    path('_/', include('a_landingpages.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
