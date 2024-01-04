@@ -66,7 +66,8 @@ INSTALLED_APPS = [
     'django_cleanup.apps.CleanupConfig',
     'a_posts',
     'a_users',
-    'a_inbox'
+    'a_inbox',
+    'a_landingpages'
 ]
 
 SITE_ID = 1
@@ -81,6 +82,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_htmx.middleware.HtmxMiddleware',
+    'a_landingpages.middleware.landingpage_middleware',
 ]
 
 ROOT_URLCONF = 'a_core.urls'
