@@ -44,6 +44,9 @@ class Tag(models.Model):
     
     class Meta:
         ordering = ['order']
+
+    def get_absolute_url(self):
+        return f'/category/{self.slug}/'
         
         
 class Comment(models.Model):
