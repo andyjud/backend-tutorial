@@ -19,6 +19,9 @@ class Post(models.Model):
     
     class Meta:
         ordering = ['-created']
+
+    def get_absolute_url(self):
+        return f'/post/{self.id}'
         
         
 class LikedPost(models.Model):
